@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Brother | 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #02040a;
+            --bg-blue: #081221;
+            --accent: #00f2fe;
+            --text-main: #f1f5f9;
+            --text-dim: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        * { box-sizing: border-box; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        body {
+            margin: 0;
+            background: radial-gradient(circle at top right, var(--bg-blue), var(--bg-deep));
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .music-player {
+            position: fixed;
+            bottom: 30px; left: 30px;
+            z-index: 1001;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid var(--accent);
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            backdrop-filter: blur(15px);
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0; width: 100%; padding: 30px;
+            display: flex; justify-content: center; gap: 20px;
+            background: rgba(2, 4, 10, 0.8);
+            backdrop-filter: blur(20px); z-index: 1000;
+        }
+
+        nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 140px 20px;
+            flex-direction: column;
+            align-items: center;
+            max-width: 850px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .page.active { display: flex; animation: fadeIn 0.8s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        .glow-h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            text-align: center;
+            background: linear-gradient(to bottom, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .story-container {
+            text-align: left;
+            background: var(--glass);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            line-height: 1.8;
+            color: #d1d5db;
+        }
+
+        .goal-card {
+            background: rgba(0, 242, 254, 0.03);
+            border: 1px solid var(--accent);
+            padding: 50px 30px;
+            border-radius: 30px;
+            text-align: center;
+            width: 100%;
+            margin-top: 40px;
+            backdrop-filter: blur(5px);
+        }
+
+        .goal-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .message-trigger {
+            margin-top: 30px;
+            background: var(--glass);
+            border: 1px dashed var(--accent);
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            color: var(--accent);
+            width: 100%;
+            text-align: center;
+        }
+
+        .message-content {
+            display: none;
+            background: rgba(0, 242, 254, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 20px;
+            border-left: 4px solid var(--accent);
+            text-align: left;
+        }
+
+        .reason-box {
+            background: var(--glass);
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 12px;
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.05);
+            text-align: left;
+        }
+    </style>
+</head>
+<body onclick="startMusic()">
+
+    <canvas id="fireworksCanvas"></canvas>
+
+    <audio id="bgMusic" loop>
+        <source src="woh din.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="music-player" onclick="toggleMusic(event)">
+        <span id="musicStatus">🎶 Play</span>
+    </div>
+
+    <nav>
+        <a onclick="showPage('home')" id="link-home" class="active">2026</a>
+        <a onclick="showPage('story')" id="link-story">Our Story</a>
+        <a onclick="showPage('reasons')" id="link-reasons">The G.O.A.T</a>
+        <a onclick="showPage('goal')" id="link-goal">Goal</a>
+    </nav>
+
+    <section id="home" class="page active">
+        <p style="letter-spacing: 5px; color: var(--accent); font-weight: 600;">NEW YEAR REVELATIONS</p>
+        <h1 class="glow-h1">HAPPY NEW YEAR</h1>
+        <p style="font-size: 1.5rem; margin-top: 15px; font-weight: 300;">to the sexiest man alive. 😉</p>
+        
+        <div class="message-trigger" onclick="toggleMsg()">A Message From Anay (Ande) ✨</div>
+        <div id="secretMsg" class="message-content">
+            Hi!! this is anay sharma aka ande ikk this Intro was not important as u are the only one who knows about this website but still heheheheh!! aahhh this hard to write but still here sitting and writing for my brother, best friend, family and much more I cant express.. I have not done a lot for u mate but please aisa mt sochna kee mein tere saath nhi hun im always and always with you no matter how many new people come to my life and the reason I love you sooooooo much is that no one ever in my life trusted me this much how much you doooo so thank you for everything u have done for me from being with me in my lowest times to being with me in Bakchod times hehehe and no matter what u can always share anything with me okaayyy???
+        </div>
+    </section>
+
+    <section id="story" class="page">
+        <h2 style="color: var(--accent); font-size: 2.5rem; margin-bottom: 30px;">Our Story</h2>
+        <div class="story-container">
+            <p>From strangers to friends to best friends to brother and family—this has been a long journey of over ig 3 years. When I first saw you, I knew this person was my vibe, but I never thought we would be such good friends...</p>
+            <p>The classes went on, you became my friend, and I can't forget the <b>super addicting popcorn hehehe</b>. 8th grade was wild—remember when <b>PUSHPA Dayan</b> complained about you to my parents? We started meeting like couples where we were almost caught by James Bond himself (my Dadi hehehe).</p>
+            <p>But the year ended peacefully with the epic trio: <b>You, Me, and Mota Bhai (Sam)</b>. We had that great time in the adventure park, but then things took a turn. You were leaving the school and I used to cry like hell. We had that fight where I said things that I now feel were worse than dying. I still feel guilty for that, but God made our friendship even stronger.</p>
+            <p>9th went by with birthdays and mujori with Rajni. Then came 10th. Because of you, I found the love of my life and you too. Even when things got messy with Anmol, we stayed together. I’m never going to forget the sports day... maar khaa lee bohot buri! But this year, one thing was top tier: <b>STATE LEVEL BRONZE LE AAYA MERA BHAI!</b></p>
+            <p>I can certainly say even if I get memory loss, I ain't gonna forget you! This is our story, and I wish God makes it endless.</p>
+            <p style="text-align: right; margin-top: 30px; font-style: italic; color: var(--accent);">— Short mein nipta diya, Lazy Ass!</p>
+        </div>
+    </section>
+
+    <section id="reasons" class="page">
+        <h2 style="color: var(--accent); font-size: 2.5rem;">The G.O.A.T</h2>
+        <div class="reason-box">🔥 Unmatched loyalty through every high and low.</div>
+        <div class="reason-box">⚡ The only one who gets my brand of bakchodi.</div>
+        <div class="reason-box">🥉 My State Level Bronze medalist champion!</div>
+        <div class="reason-box">🛡️ Someone I can trust blindly, no questions asked.</div>
+        <div class="reason-box">👑 Because you're simply the sexiest man alive. Period.</div>
+    </section>
+
+    <section id="goal" class="page">
+        <h2 style="color: var(--accent); font-size: 2.5rem;">2026 MISSION</h2>
+        <div class="goal-card">
+            <div class="goal-text">lets fuck this year tooooooo wohooooo!!</div>
+            <p style="margin-top: 20px; color: var(--text-dim);">Pure brotherhood. No filters.</p>
+        </div>
+    </section>
+
+    <script>
+        // Music Logic
+        const music = document.getElementById('bgMusic');
+        const status = document.getElementById('musicStatus');
+        let musicStarted = false;
+
+        function startMusic() {
+            if (!musicStarted) {
+                music.play().then(() => {
+                    status.innerText = "⏸ Pause";
+                    musicStarted = true;
+                }).catch(e => console.log("Waiting for user interaction"));
+            }
+        }
+
+        function toggleMusic(e) {
+            e.stopPropagation(); 
+            if (music.paused) {
+                music.play();
+                status.innerText = "⏸ Pause";
+                musicStarted = true;
+            } else {
+                music.pause();
+                status.innerText = "🎶 Play";
+            }
+        }
+
+        // Fireworks Logic
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationActive = false;
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Sparkle {
+            constructor(x, y) {
+                this.x = x; this.y = y;
+                this.size = Math.random() * 2;
+                this.speedX = (Math.random() - 0.5) * 5;
+                this.speedY = (Math.random() - 0.5) * 5;
+                this.opacity = 1;
+                this.color = Math.random() > 0.5 ? '#00f2fe' : '#ffffff';
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.opacity -= 0.008; }
+            draw() { ctx.globalAlpha = this.opacity; ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+        }
+
+        function createBurst() {
+            if (!animationActive) return;
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * (canvas.height / 2);
+            for (let i = 0; i < 30; i++) particles.push(new Sparkle(x, y));
+            setTimeout(createBurst, 1500);
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.update(); p.draw();
+                if (p.opacity <= 0) particles.splice(i, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+            document.getElementById('link-' + pageId).classList.add('active');
+            
+            if (pageId === 'goal') {
+                animationActive = true;
+                createBurst();
+            } else {
+                animationActive = false;
+                particles = [];
+            }
+            window.scrollTo(0,0);
+        }
+
+        function toggleMsg() {
+            const msg = document.getElementById('secretMsg');
+            msg.style.display = (msg.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
